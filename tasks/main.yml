@@ -1,0 +1,14 @@
+---
+- name: "Copie du dépôt logstash"
+  copy:
+    src: defaults/es.repo
+    dest: /etc/yum.repos.d/elasticsearch.repo
+    
+- name: "Installation de Logstash et dépendance JDK"
+  yum: name="{{item}}" state=latest
+  with_items:
+    - "{{ java_package }}"
+    - "elasticsearch"
+  
+- name: "Enable and start es service"
+  systemd: name=elasticsearch enabled=yes state=started
